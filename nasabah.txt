@@ -1,1 +1,3 @@
-REK-1001|Ahmad Soebarjo|500000|123456|false|0
+REK-1002|Ahmad Junaedi|5050000|123456|false|0
+REK-1003|Jajang sutarman|50000000|121212|false|0
+REK-1001|Pandu Ahmad Kamil|4950000|123456|true|3

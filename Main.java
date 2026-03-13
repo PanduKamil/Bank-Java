@@ -2,10 +2,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.Scanner;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Bank bankYoBank = new Bank();
+        Bank bankYoBank = Bank.getInstance();
         bankYoBank.loadFromFile();
 
         Scanner sc = new Scanner(System.in);
@@ -83,13 +84,10 @@ public class Main {
                                     if (akunAktif.cekLogin(inputPin)) {
                                     System.out.println("Login Berhasil!");
                                     loginBerhasil = true;
-                                }else{
-                                    System.out.println("PIN SALAH");
-                                    bankYoBank.simpanKeFile();
                                 }
                                 } catch (Exception e) {
-                
-                                    System.out.println("ERROR " + e.getMessage());
+                                    System.out.println("ERROR: " + e.getMessage());
+                                    bankYoBank.simpanKeFile();
                                 }
                                 
                                 if (loginBerhasil) {
@@ -165,6 +163,13 @@ public class Main {
                     case 4:
                         running = false;
                         System.out.println("Terima kasih!");
+                        break;
+                    case 5:
+                        System.out.println("Login Admin, 3 urutan saldo nasabah terbesar");
+                            List<Nasabah> top3 = bankYoBank.getTopNasabah(3);
+                            for (Nasabah nasabah : top3) {
+                                System.out.println(nasabah);
+                            }
                         break;
                     default:
                         System.out.println("Pilihan tidak valid!");

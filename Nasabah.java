@@ -31,7 +31,7 @@ public class Nasabah{
         this.pin = pin;
         this.saldo = saldo;
         this.isBlocked = isBlocked;
-        this.percobaan = 0;
+        this.percobaan = percobaan;
     }
     public static void validasiFormat(String input) {
         if (input == null) {
@@ -48,7 +48,7 @@ public class Nasabah{
     }
     public boolean cekLogin(String input){
         if (isBlocked) {
-            return false;
+            throw new RuntimeException(" Akun anda terblokir!! Silahkan hubungin Admin");
         }
         try {
             validasiFormat(input);
@@ -65,9 +65,10 @@ public class Nasabah{
             this.percobaan++;
              if (percobaan >= 3) {
             this.isBlocked = true;
+                throw new RuntimeException("PIN SALAH 3X!! akun anda  otomatis terblokir");
             }
         }
-        return false;
+        throw new RuntimeException(" PIN salah!!! " + "sisa percobaan " + (3 - this.percobaan) + "percobaan");
     }
     public void gantiPin(String pinBaru) {
         validasiFormat(pinBaru);
@@ -140,7 +141,7 @@ public class Nasabah{
     }
     @Override
     public String toString() {
-    return "No Rek: " + this.noRekening + " | Nama : "+ nama +" | Saldo: Rp" + this.saldo;
+    return "No Rek: " + this.noRekening + " | Nama : "+ this.nama +" | Saldo: Rp" + this.saldo;
     }
   
 

@@ -6,12 +6,28 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.math.BigDecimal;
+import java.util.stream.Collectors;
+import java.util.List;
 
 public class Bank {
     private HashMap<String, Nasabah> mapNasabah;
-    public Bank(){
+    private static Bank instance;
+    private Bank(){
         this.mapNasabah = new HashMap<>();
     }
+    public static Bank getInstance(){
+        if (instance == null) {
+            instance = new Bank();
+        }
+        return instance;
+    }
+    public List<Nasabah> getTopNasabah(int limit){
+        return mapNasabah.values().stream()
+        .sorted((a, b) -> b.getSaldo().compareTo(a.getSaldo()))
+        .limit(limit)
+        .collect(Collectors.toList());
+    } 
+
     public void tambahNasabah(Nasabah akun) {
         if (mapNasabah.containsKey(akun.getNoRekening())) {
             throw new IllegalArgumentException("Nomor Rekening sudah terdaftar");
