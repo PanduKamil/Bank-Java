@@ -1,0 +1,46 @@
+// BigDecimal
+//---- compareTo ----
+if(saldo.compareTo(jumlahTransfer) >= 0 ){
+    //Artinya : Saldo lebih besar atau sama dengan jumlah transfer(BISA MENTRANSFER)
+}else{
+    //Artinya: saldo kurang(GAGAL)
+
+}
+saldo.compareTo(jumlahTransfer) >= 0
+// ini artinya saldo lebih besar jadi jumlah transfer dan bisa juga pas pasan
+saldo.compareTo(jumlahTransfer) == 0
+// ini artinya salto pas pasan\
+saldo.compareTo(jumlahTransfer) == 1
+// ini artinya saldo lebih besar dari pada jumlahTransfer
+saldo.compareTo(jumlahTransfer) == -1
+// ini  artinya saldo lebih dikit dari jumlahTransfer
+
+if(nominalInput.compareTo(BigDecimal.ZERO) <= 0);
+// mengecek apakah input LEBIH KECIL atau SAMA DENGAN 0
+
+// ---- SCANNER ----
+// input data BigDecimal harus pake sc.next() - string - lalu nanti diconvert
+// cara 1
+BigDecimal nominal = new BigDecimal(sc.next());
+
+// cara 2
+String inputSaldo = sc.next();
+new BigDecimal(inputSaldo);
+
+//---- Pembulatan BigDecimal ---- (LIBRARY ROUNDINGMODE)
+
+saldo.divide(pembagi, 2, RoundingMode.HALF_UP)
+// angka 2 itu jumlah angka di belakang koma
+//RoundingMode.HALF_UP ini pembulatan ke atas
+
+saldo.setScale(2, RoundingMode, HALF_UP);
+// nampilin biar ada komanya di mata uang
+
+//---- HashMap ----
+
+.containsKey // buat cek apakah  udh ada atau belom
+.keySet //
+.values // menampilkan isi
+
+//---- READ WRITE ----
+file.exists()

@@ -1,0 +1,1 @@
+REK-1001|Ahmad Soebarjo|500000|123456|false|0
