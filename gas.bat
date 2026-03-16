@@ -1,0 +1,6 @@
+@echo off
+echo Memasak kode...
+javac -d bin -cp "h2-2.2.224.jar" src/main/java/*.java
+echo Menjalankan Bank Digital...
+java -cp "bin;h2-2.2.224.jar" Main
+pause
