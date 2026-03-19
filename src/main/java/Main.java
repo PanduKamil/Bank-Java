@@ -1,15 +1,16 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         DatabaseManager.inisialisasiTabel();
         Bank bankYoBank = Bank.getInstance();
-        bankYoBank.loadFromFile();
 
+        //bankYoBank.migrasiSekaliJalan();
+        bankYoBank.loadFromDatabase();
         Scanner sc = new Scanner(System.in);
         boolean running = true;
         while (running) {
@@ -42,8 +43,7 @@ public class Main {
                         
                         // 2. MASUKIN KE GUDANG
                                 bankYoBank.tambahNasabah(nasabahBaru);
-                                bankYoBank.simpanKeFile();
-                        
+                                
                                 System.out.println("Berhasil! No Rekening Anda: " + nasabahBaru.getNoRekening());
                             } catch (Exception e) {
                                 System.out.println("ERROR: " + e.getMessage());
@@ -88,7 +88,7 @@ public class Main {
                                 }
                                 } catch (Exception e) {
                                     System.out.println("ERROR: " + e.getMessage());
-                                    bankYoBank.simpanKeFile();
+                                    
                                 }
                                 
                                 if (loginBerhasil) {
@@ -124,10 +124,13 @@ public class Main {
 
                                             try {
                                                 akunAktif.transfer(penerima, jumlah);
-                                                //Catat Transaksi
-                                                bankYoBank.catatTransaksi(akunAktif.getNoRekening(), rekTujuan, jumlah);
 
-                                                bankYoBank.simpanKeFile();
+                                                // 2. LAPOR KE DATABASE (PENTING!)
+                                                bankYoBank.updateSaldoDatabase(akunAktif); // Update pengirim
+                                                bankYoBank.updateSaldoDatabase(penerima);  // Update penerima
+                                                //Catat Transaksi
+                                                bankYoBank.catatTransaksi(akunAktif.getNoRekening(), rekTujuan, jumlah, "TRANSFER");
+
                                                 System.out.println("Transfer Berhasil ke " + penerima.getNoRekening());
                                             } catch (Exception e) {
                                                 // gw ga yakin fungsi ini
@@ -138,6 +141,7 @@ public class Main {
                                         break;
                                     case 3: // MUTASI TRANSAKSI
                                         System.out.println("\n--- RIWAYAT TRANSAKSI (" + akunAktif.getNoRekening() + ")---");
+                                        
                                         java.util.List<String> history = bankYoBank.getMutasiList(akunAktif.getNoRekening());
 
                                             if (history.isEmpty()) {

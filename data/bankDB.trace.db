@@ -1,12 +1,142 @@
-2026-03-17 02:34:55.040895+07:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS nasabah (no_rekening VARCHAR(20) PRIMARY KEY,nama VARCHAR(100)[*]pin VARCHAR(6)saldo DECIMAL(12,5));"; expected "ARRAY, INVISIBLE, VISIBLE, NOT NULL, DEFAULT, GENERATED, ON UPDATE, NOT NULL, DEFAULT ON NULL, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, CHECK, REFERENCES, ,, )"; SQL statement:
-CREATE TABLE IF NOT EXISTS nasabah (no_rekening VARCHAR(20) PRIMARY KEY,nama VARCHAR(100)pin VARCHAR(6)saldo DECIMAL(12,5)); [42001-224]
-2026-03-17 03:12:53.462320+07:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS transaksi (id INT AUTO_INCREMENT PRIMARY KEY, no_rekening_pengirim VARCHAR(20), no_rekening_penerima VARCHAR(20), jumlah DECIMAL(12,2), jenis_transaksi VARCHAR(20), -- 'TRANSFER', 'TARIK', 'SETOR' tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (no_rekening_pengirim) REFERENCES nasabah(no_rekening))[*]"; expected "identifier"; SQL statement:
-CREATE TABLE IF NOT EXISTS transaksi (id INT AUTO_INCREMENT PRIMARY KEY, no_rekening_pengirim VARCHAR(20), no_rekening_penerima VARCHAR(20), jumlah DECIMAL(12,2), jenis_transaksi VARCHAR(20), -- 'TRANSFER', 'TARIK', 'SETOR' tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (no_rekening_pengirim) REFERENCES nasabah(no_rekening)) [42001-224]
-2026-03-17 03:17:55.245396+07:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS transaksi (id INT AUTO_INCREMENT PRIMARY KEY, no_rekening_pengirim VARCHAR(20), no_rekening_penerima VARCHAR(20), jumlah DECIMAL(12,2), jenis_transaksi VARCHAR(20), -- 'TRANSFER', 'TARIK', 'SETOR' tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (no_rekening_pengirim) REFERENCES nasabah(no_rekening))[*]"; expected "identifier"; SQL statement:
-CREATE TABLE IF NOT EXISTS transaksi (id INT AUTO_INCREMENT PRIMARY KEY, no_rekening_pengirim VARCHAR(20), no_rekening_penerima VARCHAR(20), jumlah DECIMAL(12,2), jenis_transaksi VARCHAR(20), -- 'TRANSFER', 'TARIK', 'SETOR' tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (no_rekening_pengirim) REFERENCES nasabah(no_rekening)) [42001-224]
-2026-03-17 03:19:49.695127+07:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS transaksi (id INT AUTO_INCREMENT PRIMARY KEY, no_rekening_pengirim VARCHAR(20), no_rekening_penerima VARCHAR(20), jumlah DECIMAL(12,2), jenis_transaksi VARCHAR(20), -- 'TRANSFER', 'TARIK', 'SETOR' tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP FOREIGN KEY (no_rekening_pengirim) REFERENCES nasabah(no_rekening))[*]"; expected "identifier"; SQL statement:
-CREATE TABLE IF NOT EXISTS transaksi (id INT AUTO_INCREMENT PRIMARY KEY, no_rekening_pengirim VARCHAR(20), no_rekening_penerima VARCHAR(20), jumlah DECIMAL(12,2), jenis_transaksi VARCHAR(20), -- 'TRANSFER', 'TARIK', 'SETOR' tanggal TIMESTAMP DEFAULT CURRENT_TIMESTAMP FOREIGN KEY (no_rekening_pengirim) REFERENCES nasabah(no_rekening)) [42001-224]
+2026-03-20 00:39:25.980342+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "REKASAL" not found; SQL statement:
+INSERT INTO transaksi(rekAsal, rekTujuan, jumlah, jenis) VALUES (?, ?, ?, ?) [42122-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.table.Table.getColumn(Table.java:759)
+	at org.h2.command.Parser.parseColumn(Parser.java:1190)
+	at org.h2.command.Parser.parseColumnList(Parser.java:1175)
+	at org.h2.command.Parser.parseInsert(Parser.java:1549)
+	at org.h2.command.Parser.parsePrepared(Parser.java:719)
+	at org.h2.command.Parser.parse(Parser.java:592)
+	at org.h2.command.Parser.parse(Parser.java:564)
+	at org.h2.command.Parser.prepareCommand(Parser.java:483)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:639)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:559)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1166)
+	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:93)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:316)
+	at Bank.catatTransaksi(Bank.java:107)
+	at Main.main(Main.java:132)
+2026-03-20 01:00:22.073345+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "JENIS" not found; SQL statement:
+INSERT INTO transaksi(no_rekening_pengirim, no_rekening_penerima, jumlah, jenis) VALUES (?, ?, ?, ?) [42122-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.table.Table.getColumn(Table.java:759)
+	at org.h2.command.Parser.parseColumn(Parser.java:1190)
+	at org.h2.command.Parser.parseColumnList(Parser.java:1175)
+	at org.h2.command.Parser.parseInsert(Parser.java:1549)
+	at org.h2.command.Parser.parsePrepared(Parser.java:719)
+	at org.h2.command.Parser.parse(Parser.java:592)
+	at org.h2.command.Parser.parse(Parser.java:564)
+	at org.h2.command.Parser.prepareCommand(Parser.java:483)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:639)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:559)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1166)
+	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:93)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:316)
+	at Bank.catatTransaksi(Bank.java:107)
+	at Main.main(Main.java:132)
+2026-03-20 02:18:21.209080+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "NO_REKENING_PENGIRIM" not found; SQL statement:
+SELECT * FROM nasabah WHERE no_rekening_pengirim = ? OR no_rekening_penrima = ? [42122-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:244)
+	at org.h2.expression.ExpressionColumn.optimizeOther(ExpressionColumn.java:226)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:213)
+	at org.h2.expression.condition.Comparison.optimize(Comparison.java:147)
+	at org.h2.expression.condition.ConditionAndOr.optimize(ConditionAndOr.java:136)
+	at org.h2.expression.Expression.optimizeCondition(Expression.java:148)
+	at org.h2.command.query.Select.prepareExpressions(Select.java:1177)
+	at org.h2.command.query.Query.prepare(Query.java:218)
+	at org.h2.command.Parser.prepareCommand(Parser.java:489)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:639)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:559)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1166)
+	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:93)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:316)
+	at Bank.getMutasiList(Bank.java:125)
+	at Main.main(Main.java:145)
+2026-03-20 02:19:33.521968+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "NO_REKENING_PENGIRIM" not found; SQL statement:
+SELECT * FROM nasabah WHERE no_rekening_pengirim = ? OR no_rekening_penerima = ? [42122-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:244)
+	at org.h2.expression.ExpressionColumn.optimizeOther(ExpressionColumn.java:226)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:213)
+	at org.h2.expression.condition.Comparison.optimize(Comparison.java:147)
+	at org.h2.expression.condition.ConditionAndOr.optimize(ConditionAndOr.java:136)
+	at org.h2.expression.Expression.optimizeCondition(Expression.java:148)
+	at org.h2.command.query.Select.prepareExpressions(Select.java:1177)
+	at org.h2.command.query.Query.prepare(Query.java:218)
+	at org.h2.command.Parser.prepareCommand(Parser.java:489)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:639)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:559)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1166)
+	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:93)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:316)
+	at Bank.getMutasiList(Bank.java:125)
+	at Main.main(Main.java:145)
+2026-03-20 02:24:10.337056+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Parameter "#1" is not set; SQL statement:
+SELECT * FROM transaksi WHERE no_rekening_pengirim = ? OR no_rekening_penerima = ? [90012-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:658)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.expression.Parameter.checkSet(Parameter.java:75)
+	at org.h2.command.Prepared.checkParameters(Prepared.java:207)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:251)
+	at org.h2.command.Command.executeQuery(Command.java:192)
+	at org.h2.jdbc.JdbcPreparedStatement.executeQuery(JdbcPreparedStatement.java:131)
+	at Bank.getMutasiList(Bank.java:126)
+	at Main.main(Main.java:145)
+2026-03-20 02:26:59.140325+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Parameter "#1" is not set; SQL statement:
+SELECT * FROM transaksi WHERE no_rekening_pengirim = ? OR no_rekening_penerima = ? [90012-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:658)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.expression.Parameter.checkSet(Parameter.java:75)
+	at org.h2.command.Prepared.checkParameters(Prepared.java:207)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:251)
+	at org.h2.command.Command.executeQuery(Command.java:192)
+	at org.h2.jdbc.JdbcPreparedStatement.executeQuery(JdbcPreparedStatement.java:131)
+	at Bank.getMutasiList(Bank.java:126)
+	at Main.main(Main.java:145)
+2026-03-20 02:28:14.716463+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Parameter "#1" is not set; SQL statement:
+SELECT * FROM transaksi WHERE no_rekening_pengirim = ? OR no_rekening_penerima = ? [90012-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:658)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.expression.Parameter.checkSet(Parameter.java:75)
+	at org.h2.command.Prepared.checkParameters(Prepared.java:207)
+	at org.h2.command.CommandContainer.query(CommandContainer.java:251)
+	at org.h2.command.Command.executeQuery(Command.java:192)
+	at org.h2.jdbc.JdbcPreparedStatement.executeQuery(JdbcPreparedStatement.java:131)
+	at Bank.getMutasiList(Bank.java:126)
+	at Main.main(Main.java:145)
+2026-03-20 02:30:44.992281+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: This method is not allowed for a prepared statement; use a regular statement instead. [90130-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcPreparedStatement.executeQuery(JdbcPreparedStatement.java:316)
+	at Bank.getMutasiList(Bank.java:126)
+	at Main.main(Main.java:145)

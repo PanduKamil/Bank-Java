@@ -9,7 +9,9 @@ public class DatabaseManager {
                             "no_rekening VARCHAR(20) PRIMARY KEY, " +
                             "nama VARCHAR(100), " +
                             "pin VARCHAR(6), " +
-                            "saldo DECIMAL(12,5))";
+                            "saldo DECIMAL(20,2), " +
+                            "is_blocked BOOLEAN DEFAULT FALSE, " +
+                            "percobaan INT DEFAULT 0)";
 
         String sqlTransaksi ="CREATE TABLE IF NOT EXISTS transaksi (" +
                             "id INT AUTO_INCREMENT PRIMARY KEY, " +
@@ -28,11 +30,11 @@ public class DatabaseManager {
                     stmt.execute(sqlNasabah);
                     stmt.execute(sqlTransaksi);
                     //print untuk develop
-                    System.out.println("[LOG] Tabel berhasil dicek/dibuat.");
+                    System.out.println("[LOG] Tabel Nasabah & Transaksi sinkron");
             
         } catch (SQLException e) {
             //print untuk develop
-            System.out.println("[ERROR] Masalah database: " + e.getMessage());
+            System.out.println("[ERROR] Gagal inisialisasi: " + e.getMessage());
         }
     }
 }
