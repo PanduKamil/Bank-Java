@@ -1,14 +1,21 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
+
+import main.java.Transaksi;
 
 public class Main {
     public static void main(String[] args) {
         DatabaseManager.inisialisasiTabel();
         Bank bankYoBank = Bank.getInstance();
 
+        DecimalFormat kursIndonesia = new DecimalFormat("###,###.##");
+        String pattern = "dd-MM-yyyy HH:mm:ss";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         //bankYoBank.migrasiSekaliJalan();
         bankYoBank.loadFromDatabase();
         Scanner sc = new Scanner(System.in);
@@ -123,15 +130,8 @@ public class Main {
                                             BigDecimal jumlah = new BigDecimal(sc.next());
 
                                             try {
-                                                akunAktif.transfer(penerima, jumlah);
-
-                                                // 2. LAPOR KE DATABASE (PENTING!)
-                                                bankYoBank.updateSaldoDatabase(akunAktif); // Update pengirim
-                                                bankYoBank.updateSaldoDatabase(penerima);  // Update penerima
-                                                //Catat Transaksi
-                                                bankYoBank.catatTransaksi(akunAktif.getNoRekening(), rekTujuan, jumlah, "TRANSFER");
-
-                                                System.out.println("Transfer Berhasil ke " + penerima.getNoRekening());
+                                                akunAktif.prosesTransfer(asal,tujuan,jumlah);
+                                                System.out.println("Transfer Berhasil ke " + tujuan.getNoRekening());
                                             } catch (Exception e) {
                                                 // gw ga yakin fungsi ini
                                                 System.out.println("ERROR : " + (e.getMessage() != null ? e.getMessage() : e.toString()));
@@ -142,15 +142,25 @@ public class Main {
                                     case 3: // MUTASI TRANSAKSI
                                         System.out.println("\n--- RIWAYAT TRANSAKSI (" + akunAktif.getNoRekening() + ")---");
                                         
-                                        java.util.List<String> history = bankYoBank.getMutasiList(akunAktif.getNoRekening());
+                                        java.util.List<String> listMutasi = bankYoBank.getMutasiList(akunAktif.getNoRekening());
 
-                                            if (history.isEmpty()) {
+                                            if (listMutasi.isEmpty()) {
                                                 System.out.println("Belum ada riwayat.");
                                             }else{
-                                                for (String barisMutasi : history) {
-                                                    System.out.println(barisMutasi);
-                                                }
+                                                for(Transaksi t : listMutasi) {
+                                                // Lu bebas mau format tanggalnya gimana,
+                                                String saldoFormat = kursIndonesia.format(jumlah);
+                                                String timeFormat = sdf.format(tanggal);
+                                                
+                                                // mau tulis MASUK/KELUAR pake if-else di sini.
+                                                if (asal.equals(noRekAktif)) {
+                                                    listHistory.add("[" + tanggal + "] KELUAR -> Ke: " + tujuan + " | -Rp" + saldoFormat );
+                                                }else if (tujuan.equals(noRekAktif)) {
+                                                    listHistory.add("[" + tanggal + "] MASUK <- Dari: " + asal + " | +Rp" + saldoFormat );
+                                                } 
+                                                }                 
                                             }
+                                                  
                                         break;
                                     case 4:
                                         logout = true;
