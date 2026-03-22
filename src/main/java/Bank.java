@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
 import main.java.NasabahDAO;
+import main.java.Transaksi;
 
 import java.util.List;
 import java.sql.*;
@@ -45,7 +46,7 @@ public class Bank {
         mapNasabah.put(akun.getNoRekening(), akun);
 
     }
-    public void loadDatabase() {
+    public void loadFromDatabase() {
         List<Nasabah> fromDB = nasabahDAO.loadAll();
         for (Nasabah n : fromDB) {
         mapNasabah.put(n.getNoRekening(), n);
@@ -61,7 +62,7 @@ public class Bank {
     public Collection<Nasabah> getSemuaNasabah(){
         return mapNasabah.values();
     }
-    public List<String> lihatRiwayat(String noRek){
+    public List<Transaksi> getMutasiList(String noRek){
         return nasabahDAO.getMutasiList(noRek);
 
     }

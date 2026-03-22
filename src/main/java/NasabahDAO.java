@@ -1,19 +1,15 @@
 package main.java;
 
+import main.java.nasabah;
+
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
 public class NasabahDAO {
 
     public void tambahNasabah(Nasabah akun) {
-        if (mapNasabah.containsKey(akun.getNoRekening())) {
-            throw new IllegalArgumentException("Nomor Rekening sudah terdaftar");
-        }
         String sql = "INSERT INTO nasabah(no_rekening, nama, pin, saldo, is_blocked, percobaan) " +
                      "VALUES(?, ?, ?, ?, ?, ?)";    
         try (Connection conn = DatabaseConnection.getConnection();
@@ -27,7 +23,7 @@ public class NasabahDAO {
                 pstmt.setInt(6, akun.getPercobaan());
 
                 pstmt.executeUpdate();
-                mapNasabah.put(akun.getNoRekening(), akun);
+  
                 System.out.println("[LOG] Nasabah berhasil disimpan ke Database.");
         } catch (Exception e) {
             throw new RuntimeException("Gagal simpan ke Database: " + e.getMessage());
@@ -35,7 +31,7 @@ public class NasabahDAO {
     }
 
     public List<Nasabah>loadAll() {
-        List<Nasabah>list = new  ArrayList<>();
+        List<Nasabah> list = new  ArrayList<>();
 
         String sql = "SELECT * FROM nasabah";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -51,13 +47,14 @@ public class NasabahDAO {
                 rs.getBoolean("is_blocked"),
                 rs.getInt("percobaan")
                 );
-                List.add(n);
+                list.add(n);
 
                 System.out.println("[LOG] Data berhasil dimuat dari Database.");
             }
         } catch (SQLException e) {
                 System.out.println("[ERROR] Gagal load DB: " + e.getMessage());
         }
+        return list;
     }
     public void updateSaldoDatabase(Nasabah akun) {
     String sql = "UPDATE nasabah SET saldo = ?, is_blocked = ?, percobaan = ? WHERE no_rekening = ?";
@@ -91,8 +88,8 @@ public class NasabahDAO {
             throw new RuntimeException("Gagal mencatat mutasi: " + e.getMessage());
         }
     }
-    public java.util.List<String> getMutasiList(String noRekAktif){
-                java.util.List<String> listHistory = new java.util.ArrayList<>();
+    public java.util.List<Transaksi> getMutasiList(String noRekAktif){
+                java.util.List<Transaksi> listHistory = new java.util.ArrayList<>();
 
         String sql = "SELECT * FROM transaksi WHERE no_rekening_pengirim = ? OR no_rekening_penerima = ?";
         try (Connection conn = DatabaseConnection.getConnection();

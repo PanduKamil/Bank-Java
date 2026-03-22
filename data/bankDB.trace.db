@@ -140,3 +140,6 @@ org.h2.jdbc.JdbcSQLNonTransientException: This method is not allowed for a prepa
 	at org.h2.jdbc.JdbcPreparedStatement.executeQuery(JdbcPreparedStatement.java:316)
 	at Bank.getMutasiList(Bank.java:126)
 	at Main.main(Main.java:145)
+2026-03-22 10:39:03.130061+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "NASABAH" not found (this database is empty); SQL statement:
+SELECT * FROM nasabah [42104-224]

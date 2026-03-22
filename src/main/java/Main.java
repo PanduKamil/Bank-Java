@@ -130,7 +130,7 @@ public class Main {
                                             BigDecimal jumlah = new BigDecimal(sc.next());
 
                                             try {
-                                                akunAktif.prosesTransfer(asal,tujuan,jumlah);
+                                                bankYoBank.prosesTransfer(asal,tujuan,jumlah);
                                                 System.out.println("Transfer Berhasil ke " + tujuan.getNoRekening());
                                             } catch (Exception e) {
                                                 // gw ga yakin fungsi ini
@@ -142,7 +142,7 @@ public class Main {
                                     case 3: // MUTASI TRANSAKSI
                                         System.out.println("\n--- RIWAYAT TRANSAKSI (" + akunAktif.getNoRekening() + ")---");
                                         
-                                        java.util.List<String> listMutasi = bankYoBank.getMutasiList(akunAktif.getNoRekening());
+                                        java.util.List<String> listMutasi = bankYoBank.lihatRiwayat(akunAktif.getNoRekening());
 
                                             if (listMutasi.isEmpty()) {
                                                 System.out.println("Belum ada riwayat.");
@@ -154,9 +154,9 @@ public class Main {
                                                 
                                                 // mau tulis MASUK/KELUAR pake if-else di sini.
                                                 if (asal.equals(noRekAktif)) {
-                                                    listHistory.add("[" + tanggal + "] KELUAR -> Ke: " + tujuan + " | -Rp" + saldoFormat );
+                                                    listMutasi.add("[" + tanggal + "] KELUAR -> Ke: " + tujuan + " | -Rp" + saldoFormat );
                                                 }else if (tujuan.equals(noRekAktif)) {
-                                                    listHistory.add("[" + tanggal + "] MASUK <- Dari: " + asal + " | +Rp" + saldoFormat );
+                                                    listMutasi.add("[" + tanggal + "] MASUK <- Dari: " + asal + " | +Rp" + saldoFormat );
                                                 } 
                                                 }                 
                                             }
