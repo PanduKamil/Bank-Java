@@ -1,10 +1,7 @@
-package main.java;
-
-import main.java.nasabah;
-
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
+
 import java.util.ArrayList;
 
 public class NasabahDAO {
@@ -101,14 +98,14 @@ public class NasabahDAO {
                     try (ResultSet rs = pstmt.executeQuery();) {
                         
                     while (rs.next()) {
-
+                        
                         String asal = rs.getString("no_rekening_pengirim");
                         String tujuan = rs.getString("no_rekening_penerima");
                         BigDecimal jumlah = rs.getBigDecimal("jumlah");
                         String jenis = rs.getString("jenis_transaksi");
                         Timestamp tanggal = rs.getTimestamp("tanggal");
 
-                        list.add(new Transaksi(asal, tujuan, jumlah, jenis, tanggal));
+                        listHistory.add(new Transaksi(asal, tujuan, jumlah, jenis, tanggal));
                     } 
                     
                     }
@@ -116,5 +113,20 @@ public class NasabahDAO {
             throw new RuntimeException("Gagal akses log: " + e.getMessage());
         }
         return listHistory;
+    }
+    public BigDecimal getSaldoTerbaru(String noRekening){
+        String sql = "SELECT saldo WHERE no_rekening = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, noRekening);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getBigDecimal("saldo");
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Gagal ambil saldo: " + e.getMessage());
+        }
+        return BigDecimal.ZERO;
     }
 }

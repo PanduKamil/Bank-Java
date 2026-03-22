@@ -1,18 +1,9 @@
 import java.util.HashMap;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Collection;
 import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
-import main.java.NasabahDAO;
-import main.java.Transaksi;
-
 import java.util.List;
-import java.sql.*;
 
 
 public class Bank {
@@ -76,6 +67,10 @@ public class Bank {
         nasabahDAO.updateSaldoDatabase(penerima);
 
         nasabahDAO.catatTransaksi(asal, tujuan, jumlah, "TRANSFER");
+    }
+    public BigDecimal getSaldoSekarang(String noRekening){
+        System.out.println("Debug: Mencoba cek saldo untuk" + noRekening);
+        return nasabahDAO.getSaldoTerbaru(noRekening);
     }
 
 

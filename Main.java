@@ -1,12 +1,9 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
-
-import main.java.Transaksi;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,8 +11,6 @@ public class Main {
         Bank bankYoBank = Bank.getInstance();
 
         DecimalFormat kursIndonesia = new DecimalFormat("###,###.##");
-        String pattern = "dd-MM-yyyy HH:mm:ss";
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         //bankYoBank.migrasiSekaliJalan();
         bankYoBank.loadFromDatabase();
         Scanner sc = new Scanner(System.in);
@@ -113,8 +108,13 @@ public class Main {
 
                                 switch (subMenu) {
                                     case 1:
+                                        System.out.println("--------------------------");
                                         System.out.println("Saldo anda Rp:" + akunAktif.getSaldo().setScale(2, RoundingMode.HALF_UP));
+                                        BigDecimal saldoSekarang = bankYoBank.getSaldoSekarang(akunAktif.getNoRekening());
+                                        System.out.println("Saldo anda saat ini : " + kursIndonesia.format(saldoSekarang));
+                                        System.out.println("--------------------------");
                                         break;
+                                        
 
                                     case 2:
                                         System.out.println("Masukan No Rekening Tujuan :");
@@ -130,8 +130,8 @@ public class Main {
                                             BigDecimal jumlah = new BigDecimal(sc.next());
 
                                             try {
-                                                bankYoBank.prosesTransfer(asal,tujuan,jumlah);
-                                                System.out.println("Transfer Berhasil ke " + tujuan.getNoRekening());
+                                                bankYoBank.prosesTransfer(akunAktif.getNoRekening(), penerima.getNoRekening(), jumlah);
+                                                System.out.println("Transfer Berhasil ke " + penerima.getNoRekening());
                                             } catch (Exception e) {
                                                 // gw ga yakin fungsi ini
                                                 System.out.println("ERROR : " + (e.getMessage() != null ? e.getMessage() : e.toString()));
@@ -142,22 +142,21 @@ public class Main {
                                     case 3: // MUTASI TRANSAKSI
                                         System.out.println("\n--- RIWAYAT TRANSAKSI (" + akunAktif.getNoRekening() + ")---");
                                         
-                                        java.util.List<String> listMutasi = bankYoBank.lihatRiwayat(akunAktif.getNoRekening());
+                                        java.util.List<Transaksi> listMutasi = bankYoBank.getMutasiList(akunAktif.getNoRekening());
 
                                             if (listMutasi.isEmpty()) {
                                                 System.out.println("Belum ada riwayat.");
                                             }else{
                                                 for(Transaksi t : listMutasi) {
-                                                // Lu bebas mau format tanggalnya gimana,
-                                                String saldoFormat = kursIndonesia.format(jumlah);
-                                                String timeFormat = sdf.format(tanggal);
+                                                try {
+                                                    System.out.printf("[%s] %-8s %-20s :%s %n%n", 
+                                                                t.getTanggal(), t.getStatus(akunAktif.getNoRekening()), 
+                                                                t.getDecStatus(akunAktif.getNoRekening()), 
+                                                                t.getNominalFormat(akunAktif.getNoRekening(), kursIndonesia));
+                                                } catch (Exception e) {
+                                                    System.err.println("Error System");
+                                                }
                                                 
-                                                // mau tulis MASUK/KELUAR pake if-else di sini.
-                                                if (asal.equals(noRekAktif)) {
-                                                    listMutasi.add("[" + tanggal + "] KELUAR -> Ke: " + tujuan + " | -Rp" + saldoFormat );
-                                                }else if (tujuan.equals(noRekAktif)) {
-                                                    listMutasi.add("[" + tanggal + "] MASUK <- Dari: " + asal + " | +Rp" + saldoFormat );
-                                                } 
                                                 }                 
                                             }
                                                   
