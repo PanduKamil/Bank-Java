@@ -1,5 +1,4 @@
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.List;
@@ -108,17 +107,21 @@ public class Main {
 
                                 switch (subMenu) {
                                     case 1:
+                                        
+                                        if (akunAktif != null) {
                                         System.out.println("--------------------------");
-                                        System.out.println("Saldo anda Rp:" + akunAktif.getSaldo().setScale(2, RoundingMode.HALF_UP));
+                                        //System.out.println("Saldo anda Rp:" + akunAktif.getSaldo().setScale(2, RoundingMode.HALF_UP));
                                         BigDecimal saldoSekarang = bankYoBank.getSaldoSekarang(akunAktif.getNoRekening());
                                         System.out.println("Saldo anda saat ini : " + kursIndonesia.format(saldoSekarang));
                                         System.out.println("--------------------------");
+                                        }                                    
                                         break;
                                         
 
                                     case 2:
                                         System.out.println("Masukan No Rekening Tujuan :");
                                         String rekTujuan = sc.next();
+                                        sc.nextLine();
                                         Nasabah penerima = bankYoBank.cariNasabah(rekTujuan);
 
                                             if (penerima == null) {
@@ -143,18 +146,21 @@ public class Main {
                                         System.out.println("\n--- RIWAYAT TRANSAKSI (" + akunAktif.getNoRekening() + ")---");
                                         
                                         java.util.List<Transaksi> listMutasi = bankYoBank.getMutasiList(akunAktif.getNoRekening());
-
+                                        
                                             if (listMutasi.isEmpty()) {
                                                 System.out.println("Belum ada riwayat.");
                                             }else{
                                                 for(Transaksi t : listMutasi) {
                                                 try {
-                                                    System.out.printf("[%s] %-8s %-20s :%s %n%n", 
-                                                                t.getTanggal(), t.getStatus(akunAktif.getNoRekening()), 
+                                                    String tglShort = t.getTanggal().toString().substring(0, 16);
+
+                                                    System.out.printf("%-22s | %-8s | %-20s | %15s %n", 
+                                                                tglShort, t.getStatus(akunAktif.getNoRekening()), 
                                                                 t.getDecStatus(akunAktif.getNoRekening()), 
                                                                 t.getNominalFormat(akunAktif.getNoRekening(), kursIndonesia));
                                                 } catch (Exception e) {
-                                                    System.err.println("Error System");
+                                                    System.out.println("!! Data transaksi korup !!");
+                                                    e.printStackTrace();
                                                 }
                                                 
                                                 }                 

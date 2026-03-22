@@ -115,7 +115,7 @@ public class NasabahDAO {
         return listHistory;
     }
     public BigDecimal getSaldoTerbaru(String noRekening){
-        String sql = "SELECT saldo WHERE no_rekening = ?";
+        String sql = "SELECT saldo FROM nasabah WHERE no_rekening = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {

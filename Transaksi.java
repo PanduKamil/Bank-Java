@@ -16,7 +16,6 @@ public class Transaksi {
     public String getJenis(){
         return jenis;
     }
-
     public String getAsal() {
         return asal;
     }
@@ -30,7 +29,7 @@ public class Transaksi {
         return tanggal;
     }
     public String getStatus(String noRekeningAktif){
-        if (this.asal.equals(noRekeningAktif)) {
+        if (this.asal != null && this.asal.equals(noRekeningAktif)) {
             return "KELUAR";
         }else{
             return "MASUK";
@@ -38,11 +37,11 @@ public class Transaksi {
     }
     public String getDecStatus(String noRekeningAktif){
         String lawan = this.asal.equals(noRekeningAktif) ? this.tujuan : this.asal;
-        String preposisi = this.asal.equals(noRekeningAktif) ? "Ke: " : "Dari: ";
-        return String.format("%-6s %s", lawan + preposisi);
+        String preposisi = this.asal.equals(noRekeningAktif) ? "KE  : " : "DARI: ";
+        return String.format("%s %-10s", lawan, preposisi);
     }
     public String getNominalFormat(String noRekeningAktif, java.text.Format format){
-        String tanda = this.asal.equals(noRekeningAktif) ? "-Rp" : "+Rp";
+        String tanda = this.asal.equals(noRekeningAktif) ? "-Rp " : "+Rp ";
         return tanda + format.format(jumlah);
     }
 }
