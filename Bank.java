@@ -2,7 +2,8 @@ import java.util.HashMap;
 import java.util.Collection;
 import java.math.BigDecimal;
 import java.util.stream.Collectors;
-
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -58,16 +59,41 @@ public class Bank {
 
     }
     public void prosesTransfer(String asal, String tujuan, BigDecimal jumlah){
-        Nasabah pengirim = cariNasabah(asal);
-        Nasabah penerima = cariNasabah(tujuan);
+        Connection conn = null;
+        try {
+            conn = DatabaseConnection.getConnection();
 
-        pengirim.transfer(penerima, jumlah);
+            conn.setAutoCommit(false);
 
-        nasabahDAO.updateSaldoDatabase(pengirim);
-        nasabahDAO.updateSaldoDatabase(penerima);
+            Nasabah pengirim = cariNasabah(asal);
+            Nasabah penerima = cariNasabah(tujuan);
 
-        nasabahDAO.catatTransaksi(asal, tujuan, jumlah, "TRANSFER");
+            pengirim.transfer(penerima, jumlah);
+
+            nasabahDAO.updateSaldoDatabase(pengirim, conn);
+            nasabahDAO.updateSaldoDatabase(penerima, conn);
+
+            nasabahDAO.catatTransaksi(asal, tujuan, jumlah, "TRANSFER", conn);
+
+            conn.commit();
+            System.out.println("Tranfer Berhasil & Data Saved");
+            
+        } catch (Exception e) {
+        try {
+            if (conn != null) {
+                conn.rollback(); // [KUNCI ROLLBACK 3] Batalin semua jika ada satu aja yang gagal
+                System.err.println("!! TRANSACTION ROLLBACK: Saldo Aman !!");
+            }
+        } catch (SQLException ex) { ex.printStackTrace(); }
+        throw new RuntimeException(e.getMessage());
+    } finally {
+        // Jangan lupa tutup koneksi manual karena autoCommit tadi kita matiin
+        try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
     }
+}
+        
+        
+
     public BigDecimal getSaldoSekarang(String noRekening){
         System.out.println("Debug: Mencoba cek saldo untuk" + noRekening);
         return nasabahDAO.getSaldoTerbaru(noRekening);

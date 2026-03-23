@@ -30,9 +30,9 @@ public class Transaksi {
     }
     public String getStatus(String noRekeningAktif){
         if (this.asal != null && this.asal.equals(noRekeningAktif)) {
-            return "KELUAR";
+            return "KELUAR KE: ";
         }else{
-            return "MASUK";
+            return "MASUK DARI: ";
         }
     }
     public String getDecStatus(String noRekeningAktif){

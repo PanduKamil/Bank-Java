@@ -53,11 +53,10 @@ public class NasabahDAO {
         }
         return list;
     }
-    public void updateSaldoDatabase(Nasabah akun) {
+    public void updateSaldoDatabase(Nasabah akun, Connection conn) {
     String sql = "UPDATE nasabah SET saldo = ?, is_blocked = ?, percobaan = ? WHERE no_rekening = ?";
     
-    try (Connection conn = DatabaseConnection.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
         
         pstmt.setBigDecimal(1, akun.getSaldo());
         pstmt.setBoolean(2, akun.getStatusBlokir());
@@ -70,10 +69,9 @@ public class NasabahDAO {
         System.out.println("[ERROR] Gagal update data ke DB: " + e.getMessage());
     }
     }
-    public void catatTransaksi(String rekAsal, String rekTujuan, BigDecimal jumlah, String jenis){
+    public void catatTransaksi(String rekAsal, String rekTujuan, BigDecimal jumlah, String jenis, Connection conn){
         String sql = "INSERT INTO transaksi(no_rekening_pengirim, no_rekening_penerima, jumlah, jenis_transaksi) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, rekAsal);
             pstmt.setString(2, rekTujuan);

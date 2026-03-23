@@ -97,6 +97,9 @@ public class Nasabah{
         this.saldo = saldo.subtract(jumlah);
     }  
     public void transfer(Nasabah target, BigDecimal jumlah){
+        if (this.getStatusBlokir()) {
+        throw new IllegalArgumentException("AKUN ANDA TERBLOKIR, TIDAK BISA TRANSAKSI");
+    }
         if (target.getStatusBlokir()) {
             throw new IllegalArgumentException("AKUN TUJUAN TERBLOKIR");
         }
