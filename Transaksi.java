@@ -36,10 +36,12 @@ public class Transaksi {
         }
     }
     public String getDecStatus(String noRekeningAktif){
-        String lawan = this.asal.equals(noRekeningAktif) ? this.tujuan : this.asal;
-        String preposisi = this.asal.equals(noRekeningAktif) ? "KE  : " : "DARI: ";
-        return String.format("%s %-10s", lawan, preposisi);
-    }
+    // Tambahin pengecekan null biar aman
+    String asalRek = (this.asal == null) ? "SISTEM" : this.asal;
+    String lawan = asalRek.equals(noRekeningAktif) ? (this.tujuan != null ? this.tujuan : "SISTEM") : asalRek;
+    String preposisi = asalRek.equals(noRekeningAktif) ? "KE  : " : "DARI: ";
+    return String.format("%s %-10s", preposisi, lawan);
+}
     public String getNominalFormat(String noRekeningAktif, java.text.Format format){
         String tanda = this.asal.equals(noRekeningAktif) ? "-Rp " : "+Rp ";
         return tanda + format.format(jumlah);

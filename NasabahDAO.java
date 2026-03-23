@@ -31,10 +31,9 @@ public class NasabahDAO {
         List<Nasabah> list = new  ArrayList<>();
 
         String sql = "SELECT * FROM nasabah";
-        try (Connection conn = DatabaseConnection.getConnection();
+        try(Connection conn = DatabaseConnection.getConnection();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-        ) {
+            ResultSet rs = stmt.executeQuery(sql);){
             while (rs.next()) {
                 Nasabah n = new Nasabah(
                 rs.getString("no_rekening"),

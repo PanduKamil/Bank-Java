@@ -86,10 +86,13 @@ public class Main {
                                     if (akunAktif.cekLogin(inputPin)) {
                                     System.out.println("Login Berhasil!");
                                     loginBerhasil = true;
+
+                                    bankYoBank.updateDataNasabah(akunAktif);
                                 }
                                 } catch (Exception e) {
                                     System.out.println("ERROR: " + e.getMessage());
                                     
+                                    bankYoBank.updateDataNasabah(akunAktif);
                                 }
                                 
                                 if (loginBerhasil) {

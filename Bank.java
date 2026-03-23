@@ -76,7 +76,7 @@ public class Bank {
             nasabahDAO.catatTransaksi(asal, tujuan, jumlah, "TRANSFER", conn);
 
             conn.commit();
-            System.out.println("Tranfer Berhasil & Data Saved");
+            System.out.println("Transfer Berhasil & Data Saved");
             
         } catch (Exception e) {
         try {
@@ -86,17 +86,38 @@ public class Bank {
             }
         } catch (SQLException ex) { ex.printStackTrace(); }
         throw new RuntimeException(e.getMessage());
-    } finally {
+        } finally {
         // Jangan lupa tutup koneksi manual karena autoCommit tadi kita matiin
         try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+        }
     }
-}
         
+    public void updateDataNasabah(Nasabah n){
+        try (Connection conn = DatabaseConnection.getConnection()){
+            nasabahDAO.updateSaldoDatabase(n, conn);
+        } catch (Exception e) {
+            System.err.println("Gagal sinkron data: " + e.getMessage());
+        }
         
+    }
 
     public BigDecimal getSaldoSekarang(String noRekening){
         System.out.println("Debug: Mencoba cek saldo untuk" + noRekening);
         return nasabahDAO.getSaldoTerbaru(noRekening);
+    }
+    public void prosesTariktunai(String noRek, BigDecimal jumlah){
+        Nasabah n = cariNasabah(noRek);
+        
+        n.kurangiSaldo(jumlah);
+        
+        nasabahDAO.updateSaldoDatabase(noRek, "ATM", jumlah, "TARIK TUNAI");
+    }
+    public void prosesSetorTunai(String noRek, BigDecimal jumlah){
+        Nasabah n = cariNasabah(noRek);
+        
+        n.tambahSaldo(jumlah);
+        
+        nasabahDAO.updateSaldoDatabase("CASH", noRek, jumlah, "SETOR TUNAI");
     }
 
 
