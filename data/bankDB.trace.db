@@ -143,3 +143,20 @@ org.h2.jdbc.JdbcSQLNonTransientException: This method is not allowed for a prepa
 2026-03-22 10:39:03.130061+07:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "NASABAH" not found (this database is empty); SQL statement:
 SELECT * FROM nasabah [42104-224]
+2026-03-25 22:36:19.617671+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "UPDATE [*]* FROM NASABAH WHERE IS_BLOCKED ""FALSE"" TO ""TRUE"""; expected "identifier"; SQL statement:
+UPDATE * FROM NASABAH WHERE IS_BLOCKED "FALSE" TO "TRUE" [42001-224]
+2026-03-25 22:45:44.481472+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "PIN CHARACTER VARYING(6)": "'8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92' (64)"; SQL statement:
+INSERT INTO nasabah(no_rekening, nama, pin, saldo, is_blocked, percobaan) VALUES(?, ?, ?, ?, ?, ?) [22001-224]
+2026-03-25 22:55:02.278289+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "PIN CHARACTER VARYING(6)": "'8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92' (64)"; SQL statement:
+INSERT INTO nasabah(no_rekening, nama, pin, saldo, is_blocked, percobaan) VALUES(?, ?, ?, ?, ?, ?) [22001-224]
+2026-03-25 22:58:49.412567+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM NASABAH\000d\000aALTER [*]TABLE nasabah ALTER COLUMN pin VARCHAR(64)"; SQL statement:
+SELECT * FROM NASABAH
+ALTER TABLE nasabah ALTER COLUMN pin VARCHAR(64) [42000-224]
+2026-03-25 22:58:53.483953+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM NASABAH\000d\000aALTER [*]TABLE nasabah ALTER COLUMN pin VARCHAR(64)"; SQL statement:
+SELECT * FROM NASABAH
+ALTER TABLE nasabah ALTER COLUMN pin VARCHAR(64) [42000-224]

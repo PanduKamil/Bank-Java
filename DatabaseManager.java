@@ -8,7 +8,7 @@ public class DatabaseManager {
         String sqlNasabah ="CREATE TABLE IF NOT EXISTS nasabah (" +
                             "no_rekening VARCHAR(20) PRIMARY KEY, " +
                             "nama VARCHAR(100), " +
-                            "pin VARCHAR(6), " +
+                            "pin VARCHAR(64), " +
                             "saldo DECIMAL(20,2), " +
                             "is_blocked BOOLEAN DEFAULT FALSE, " +
                             "percobaan INT DEFAULT 0)";

@@ -138,6 +138,7 @@ public class Main {
                                             try {
                                                 bankYoBank.prosesTransfer(akunAktif.getNoRekening(), penerima.getNoRekening(), jumlah);
                                                 System.out.println("Transfer Berhasil ke " + penerima.getNoRekening());
+
                                             } catch (Exception e) {
                                                 // gw ga yakin fungsi ini
                                                 System.out.println("ERROR : " + (e.getMessage() != null ? e.getMessage() : e.toString()));

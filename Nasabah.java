@@ -14,9 +14,9 @@ public class Nasabah{
         public Nasabah(String nama, String pinAwal, BigDecimal saldoAwal) {
         validasiFormatNama(nama);
         validasiFormat(pinAwal);
-
+            //this.pin = SecurityUtil.hashPIN(pinAwal); // Simpen hasil acakan, bukan angka asli
             this.nama = nama;
-            this.pin = pinAwal;
+            this.pin = SecurityUtil.hashPIN(pinAwal);
             this.percobaan = 0;
             this.isBlocked = false;
             this.saldo = saldoAwal;
@@ -25,7 +25,7 @@ public class Nasabah{
     }
     public Nasabah(String noRek, String nama, String pin, BigDecimal saldo, boolean isBlocked, int percobaan){
         validasiFormatNama(nama);
-
+        //this.pin = SecurityUtil.hashPIN(pinAwal); // Simpen hasil acakan, bukan angka asli
         this.noRekening = noRek;
         this.nama = nama;
         this.pin = pin;
@@ -57,8 +57,12 @@ public class Nasabah{
             if (this.percobaan >= 3) this.isBlocked = true;
             throw e;
         }
-
-        if (input.equals(this.pin)) {
+        // PIN input dari user diacak dulu, baru dibandingin sama yang di DB
+        //if (SecurityUtil.hashPIN(input).equals(this.pin)) {
+        //    percobaan = 0;
+        //   return true;
+        //}
+        if (SecurityUtil.hashPIN(input).equals(this.pin)) {
             percobaan = 0;
             return true;
         }else{

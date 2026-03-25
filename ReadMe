@@ -44,3 +44,36 @@ saldo.setScale(2, RoundingMode, HALF_UP);
 
 //---- READ WRITE ----
 file.exists()
+
+//tools bypass bruteforce 
+john the Ripper atau Hashcat
+
+import java.security.MessageDigest;
+
+public class SecurityUtil {
+    public static String hashPIN(String pin) {
+        try {
+            // 1. Panggil mesin SHA-256
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            
+            // 2. Ubah PIN jadi byte dan acak!
+            byte[] hash = digest.digest(pin.getBytes("UTF-8"));
+            
+            // 3. Siapin StringBuilder buat nampung hasil Hexadecimal (64 karakter)
+            StringBuilder hexString = new StringBuilder();
+            
+            // 4. Looping buat ubah byte jadi Hex (0-f)
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString(); // Balikin hasil acakan final
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+}
+
+String pinSecure = SecurityUtil.hashPIN(pinInput);
+// Masukin pinSecure ini ke query SQL lu
