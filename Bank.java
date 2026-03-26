@@ -16,7 +16,7 @@ public class Bank {
     private Bank(){
         this.mapNasabah = new HashMap<>();
     }
-    public static Bank getInstance(){
+    public static synchronized Bank getInstance(){
         if (instance == null) {
             instance = new Bank();
         }
@@ -84,14 +84,67 @@ public class Bank {
                 conn.rollback(); // [KUNCI ROLLBACK 3] Batalin semua jika ada satu aja yang gagal
                 System.err.println("!! TRANSACTION ROLLBACK: Saldo Aman !!");
             }
-        } catch (SQLException ex) { ex.printStackTrace(); }
-        throw new RuntimeException(e.getMessage());
-        } finally {
-        // Jangan lupa tutup koneksi manual karena autoCommit tadi kita matiin
-        try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
-        }
+            } catch (SQLException ex) { ex.printStackTrace(); }
+            throw new RuntimeException(e.getMessage());
+            } finally {
+            // Jangan lupa tutup koneksi manual karena autoCommit tadi kita matiin
+            try { if (conn != null) conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
     }
+    public void prosesTariktunai(String penarik, BigDecimal jumlah){
+        Connection conn = null;
+        try {
+            conn = DatabaseConnection.getConnection();
+
+            conn.setAutoCommit(false);
+            Nasabah n = cariNasabah(penarik);
         
+            n.kurangiSaldo(jumlah);
+        
+            nasabahDAO.updateSaldoDatabase(n, conn);
+            nasabahDAO.catatTransaksi(penarik,"ATM", jumlah,"Tarik Tunai", conn);
+
+            conn.commit();
+
+        } catch (Exception e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                    System.err.println("!! TarikTunai ROLLBACK");
+                }
+            } catch (SQLException ex) {ex.printStackTrace(); }
+            throw new RuntimeException(e.getMessage());
+            } finally{
+                try { if (conn != null) conn.close(); } catch(SQLException e) {e.printStackTrace(); }
+            }
+        
+    }
+    public void prosesSetorTunai(String penyetor, BigDecimal jumlah){
+        Connection conn = null;
+        try {
+            conn = DatabaseConnection.getConnection();
+
+            conn.setAutoCommit(false);
+            Nasabah n = cariNasabah(penyetor);
+        
+            n.tambahSaldo(jumlah);
+            
+            nasabahDAO.updateSaldoDatabase(n, conn);
+            nasabahDAO.catatTransaksi(penyetor,"CASH/TELLER", jumlah, "Setor Tunai", conn);
+
+            conn.commit();
+        } catch (Exception e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                    System.err.println("!! SETORTUNAI ROLLBACK");
+                }
+            } catch (SQLException ex) {ex.printStackTrace(); }
+            throw new RuntimeException(e.getMessage());
+            } finally{
+                try { if (conn != null) conn.close(); } catch(SQLException e) {e.printStackTrace(); }
+            }
+    } 
     public void updateDataNasabah(Nasabah n){
         try (Connection conn = DatabaseConnection.getConnection()){
             nasabahDAO.updateSaldoDatabase(n, conn);
@@ -105,21 +158,39 @@ public class Bank {
         System.out.println("Debug: Mencoba cek saldo untuk" + noRekening);
         return nasabahDAO.getSaldoTerbaru(noRekening);
     }
-    public void prosesTariktunai(String noRek, BigDecimal jumlah){
-        Nasabah n = cariNasabah(noRek);
-        
-        n.kurangiSaldo(jumlah);
-        
-        nasabahDAO.updateSaldoDatabase(noRek, "ATM", jumlah, "TARIK TUNAI");
-    }
-    public void prosesSetorTunai(String noRek, BigDecimal jumlah){
-        Nasabah n = cariNasabah(noRek);
-        
-        n.tambahSaldo(jumlah);
-        
-        nasabahDAO.updateSaldoDatabase("CASH", noRek, jumlah, "SETOR TUNAI");
-    }
+    public void nasabahUnblock(String noRek){
+        Connection conn = null;
+        Nasabah target = cariNasabah(noRek);
+        if (target == null) {
+            throw new RuntimeException("Nasabah tidak ditemukan");
+        }
+        try {
+            conn = DatabaseConnection.getConnection();
 
+            conn.setAutoCommit(false);
+            nasabahDAO.unblockNasabah(target, conn);
 
-    
+            target.resetBlokir();
+            System.out.println("Berhasil unBlock" + target.getNama());
+            conn.commit();
+
+        } catch (Exception e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                    System.err.println("!! SETORTUNAI ROLLBACK");
+                }
+            } catch (SQLException ex) {ex.printStackTrace(); }
+            throw new RuntimeException(e.getMessage());
+            } finally{
+                try { if (conn != null) conn.close(); } catch(SQLException e) {e.printStackTrace(); }
+            }
+    }
+    public void getNasabahBlocked(Nasabah akun){
+        try (Connection conn = DatabaseConnection.getConnection()){
+            nasabahDAO.nasabahBlocked(akun);
+        } catch (Exception e) {
+            System.err.println("Gagal mencari nasabah terblokir: " + e.getMessage());
+        }
+    }
 }

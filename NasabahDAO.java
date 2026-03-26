@@ -32,8 +32,8 @@ public class NasabahDAO {
 
         String sql = "SELECT * FROM nasabah";
         try(Connection conn = DatabaseConnection.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);){
+           PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery(sql);){
             while (rs.next()) {
                 Nasabah n = new Nasabah(
                 rs.getString("no_rekening"),
@@ -82,6 +82,7 @@ public class NasabahDAO {
             throw new RuntimeException("Gagal mencatat mutasi: " + e.getMessage());
         }
     }
+
     public java.util.List<Transaksi> getMutasiList(String noRekAktif){
                 java.util.List<Transaksi> listHistory = new java.util.ArrayList<>();
 
@@ -125,5 +126,43 @@ public class NasabahDAO {
             throw new IllegalArgumentException("Gagal ambil saldo: " + e.getMessage());
         }
         return BigDecimal.ZERO;
+    }
+    public void unblockNasabah(Nasabah akun, Connection conn){
+        String sql = "UPDATE nasabah SET is_blocked = false, percobaan = 0 WHERE no_rekening = ?";
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, akun.getNoRekening());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("[ERROR] Gagal unblockNasabah: " + e.getMessage());
+        }
+    }
+
+    List<Nasabah> nasabahBlocked(Nasabah akun){
+        List<Nasabah> list = new ArrayList<>();
+        String sql = "SELECT * FROM nasabah WHERE is_blocked = TRUE";
+
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery(sql);){
+            while (rs.next()) {
+                Nasabah n = new Nasabah(
+                rs.getString("no_rekening"),
+                rs.getString("nama"),
+                rs.getString("pin"),
+                rs.getBigDecimal("saldo"),
+                rs.getBoolean("is_blocked"),
+                rs.getInt("percobaan")
+                );
+                list.add(n);
+            list.add(n);
+
+                System.out.println("[LOG] Data berhasil dimuat dari Database.");
+            }
+        } catch (SQLException e) {
+                System.out.println("[ERROR] Gagal load DB: " + e.getMessage());
+        }
+        return list;
     }
 }

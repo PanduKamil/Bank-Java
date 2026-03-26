@@ -2,6 +2,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -26,6 +27,31 @@ public class Main {
 
             try {
                 switch (pilihan) {
+                    case 0:
+                        String username = sc.nextLine();
+                        String password = sc.nextLine();
+                        Integer runner = sc.nextInt();
+                        sc.nextLine();
+                        if (username.equals("admin") && password.equals("admin123")) {
+                            switch (runner) {
+                                case 0:
+                                    String noRek = sc.nextLine();
+                                    Nasabah target = bankYoBank.cariNasabah(noRek); // Cari objeknya dulu
+                                    bankYoBank.nasabahUnblock(noRek); // Kirim objeknya
+                                    
+                                    break;
+                                case 1:
+                                    List<Nasabah> daftarBloked = bankYoBank.getNasabahBlocked();
+                                    for (Nasabah n : daftarBloked) {
+                                        System.out.println(n.getNoRekening() + " - " + n.getNama());
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        break;
+
                     case 1:
                         // LOGIKA DAFTAR
                         System.out.println("\n--- PENDAFTARAN NASABAH BARU ---");
