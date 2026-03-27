@@ -77,3 +77,13 @@ public class SecurityUtil {
 
 String pinSecure = SecurityUtil.hashPIN(pinInput);
 // Masukin pinSecure ini ke query SQL lu
+
+di Nasabah.java
+if (SecurityUtil.hashPIN(input).equals(this.pin)) {
+    percobaan = 0;
+    return true;
+} else {
+    this.percobaan++;
+    // Hati-hati di sini, kalau pas percobaan ke-3 salah, 
+    // pastikan is_blocked langsung ke-update di DB juga.
+}
